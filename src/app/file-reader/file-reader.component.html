@@ -1,0 +1,57 @@
+
+<div *ngIf="allDataInJson.length > 0">
+  
+  
+
+  
+  <table class="table ">
+    
+    <thead>
+      <tr >
+       <th *ngFor = "let head of headers; let i = index">
+         {{head}}
+         <div *ngIf = "i == 3">
+         <button  type="button btn-block" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Select Product
+          </button>
+          <div class="dropdown-menu">
+            <a class="dropdown-item" *ngFor = "let product of products" (click) = "filter(product)">{{product}}</a>
+            
+          </div>
+        </div>
+
+        <div *ngIf = "i == 8">
+            <button  type="button btn-block" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+               Select Owner
+             </button>
+             <div class="dropdown-menu">
+               <a class="dropdown-item" *ngFor = "let owner of owners" (click) = "filterOwnerName(owner)">{{owner}}</a>
+               
+             </div>
+           </div>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor = "let data of allfilterdData">
+        <th  scope="row">{{data["Dossier Ref"]}}</th>
+        <th scope="row" >{{data["Dossier Title"]}}</th>
+        <th scope="row" >{{data["Type"]}}</th>
+        <th scope="row" >
+          {{data["Product"]}}
+          
+        </th>
+        <th scope="row" >{{data["Urgency"]}}</th>
+        <th scope="row" >{{data["Requestor Company/Team"]}}</th>
+        <th scope="row" >{{data["Last Update"]}}</th>
+        <th scope="row" >{{data["Submitted Date"]}}</th>
+        <th scope="row" >{{data["Owner name"]}}</th>
+        <th scope="row" >{{data["Owner team"]}}</th>
+        <th scope="row" >{{data["Dossier Age"]}}</th>
+        <th scope="row" >{{data["Last Action Date"]}}</th>
+      </tr>
+      
+    </tbody>
+  </table>
+  
+</div>

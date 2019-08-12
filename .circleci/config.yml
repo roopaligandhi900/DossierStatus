@@ -1,0 +1,41 @@
+version: 2
+jobs:
+  deploy:
+    machine:
+        enabled: true
+    working_directory: ~/roopali-file-reader  
+    steps:
+       - checkout
+       - run: 
+          name: test current dir
+          command: ls -la
+       - run: 
+          name: test docker
+          command: docker ps -a
+       - run:
+          name: check image 
+          command: docker image ls    
+       - run:
+          name: docker build image
+          command: docker build -t xt .
+       - run:
+          name: Push to docker hub
+          command: |
+             docker login -u $DOCKER_HUB_USERNAME -p $DOCKER_HUB_PASSWORD
+       - run: 
+          name: heroku container deploy
+          command: |
+             curl https://cli-assets.heroku.com/install-ubuntu.sh | sh
+             heroku container:login
+             heroku container:push web --app $HEROKU_APP_NAME
+             heroku container:release web --app $HEROKU_APP_NAME
+             
+      
+workflows:
+    version: 2
+    build_and_test:
+      jobs:
+        - deploy:
+            filters:
+              branches:
+                only: master
