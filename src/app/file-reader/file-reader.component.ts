@@ -33,24 +33,90 @@ export class FileReaderComponent implements OnInit {
               if(this.products.indexOf(lineData[3]) == -1) {
                 this.products.push(lineData[3])
               }
-              if(this.owners.indexOf(lineData[8]) == -1) {
-                this.owners.push(lineData[8]);
+              if(this.owners.indexOf(lineData[9]) == -1) {
+                this.owners.push(lineData[9]);
               }
               obj[headers[j]] = lineData[j]
             }  
             this.allDataInJson.push(obj); 
             this.allfilterdData.push(obj);
+           
           }          
         })
+
+        this.allfilterdData = this.allDataInJson.sort((a, b) => {
+          
+          if(parseInt(a['Dossier Age']) < parseInt(b['Dossier Age'])) {
+            return 1
+          }
+          if(parseInt(a['Dossier Age']) > parseInt(b['Dossier Age'])) {
+            return -1
+          }
+          return 0
+        });
       })
   }
 
+  compute(data) {
+    let allData = data.split('\n');
+    let headers= [];
+    allData.map((e, i) => {
+      if(i == 0){
+        headers = e.split(',');
+        this.headers = headers
+      }else{
+        let lineData = e.split(',')
+        let obj = {}
+        for (let j = 0; j < headers.length; j++) {
+          if(this.products.indexOf(lineData[3]) == -1) {
+            this.products.push(lineData[3])
+          }
+          if(this.owners.indexOf(lineData[9]) == -1) {
+            this.owners.push(lineData[9]);
+          }
+          obj[headers[j]] = lineData[j]
+        }  
+        this.allDataInJson.push(obj); 
+        this.allfilterdData.push(obj);
+       
+      }          
+    })
+
+    this.allfilterdData = this.allDataInJson.sort((a, b) => {
+      
+      if(parseInt(a['Dossier Age']) < parseInt(b['Dossier Age'])) {
+        return 1
+      }
+      if(parseInt(a['Dossier Age']) > parseInt(b['Dossier Age'])) {
+        return -1
+      }
+      return 0
+    });
+  }
+
   filter(product) {
-    console.log(product)
-    this.allfilterdData = this.allDataInJson.filter(e => e['Product'] === product)
+
+    if(product === 'none') {
+      this.allfilterdData = this.allDataInJson
+    }else {
+      this.allfilterdData = this.allDataInJson.filter(e => e['Product'] === product)
+    }
 
   }
   filterOwnerName(name) {
-    this.allfilterdData = this.allDataInJson.filter(e => e['Owner name'] === name)
+
+    if(name === 'none') {
+      this.allfilterdData = this.allDataInJson  
+    }else {
+      this.allfilterdData = this.allDataInJson.filter(e => e['Owner team'] === name)
+    }
+  }
+
+  read(event){
+      let fileReaer = new FileReader();
+      fileReaer.onload = (e) => {
+        this.compute(fileReaer.result);
+      }
+      fileReaer.readAsText(event.target.files[0]);
   }
 }

@@ -1,34 +1,41 @@
 
+<div class="head-filters">
+    <div>
+        <form>
+            <div class="form-group">
+              <label for="exampleFormControlFile1">Input File</label>
+              <input type="file" class="form-control-file" (change) = "read($event)"id="exampleFormControlFile1">
+            </div>
+          </form>
+    </div>
+    <div>
+        <button  type="button btn-block" class="btn btn-block btn-dark dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+           Select Product
+          </button>
+          <div class="dropdown-menu">
+            <a class="dropdown-item" *ngFor = "let product of products" (click) = "filter(product)">{{product}}</a>
+            <a class="dropdown-item"  (click) = "filter('none')">Remove Filter</a>
+          </div>
+        </div>
+        <div>
+              <button  type="button btn-block" class="btn btn-dark btn-block dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                 Select Owner Team
+               </button>
+               <div class="dropdown-menu">
+                 <a class="dropdown-item" *ngFor = "let owner of owners" (click) = "filterOwnerName(owner)">{{owner}}</a>
+                 <a class="dropdown-item"  (click) = "filterOwnerName('none')">Remove Filter</a>
+                 
+               </div>
+              </div>
+</div>
 <div *ngIf="allDataInJson.length > 0">
-  
-  
-
-  
+    
   <table class="table ">
     
     <thead>
       <tr >
        <th *ngFor = "let head of headers; let i = index">
          {{head}}
-         <div *ngIf = "i == 3">
-         <button  type="button btn-block" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Select Product
-          </button>
-          <div class="dropdown-menu">
-            <a class="dropdown-item" *ngFor = "let product of products" (click) = "filter(product)">{{product}}</a>
-            
-          </div>
-        </div>
-
-        <div *ngIf = "i == 8">
-            <button  type="button btn-block" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-               Select Owner
-             </button>
-             <div class="dropdown-menu">
-               <a class="dropdown-item" *ngFor = "let owner of owners" (click) = "filterOwnerName(owner)">{{owner}}</a>
-               
-             </div>
-           </div>
         </th>
       </tr>
     </thead>
