@@ -16,7 +16,9 @@ export class FileReaderComponent implements OnInit {
   headers = []
   products = [];
   allfilterdData = []
-  owners = []
+  owners = [];
+  selectedProduct = null;
+  selectedOwner = null;
 
   ngOnInit() {
       this.http.get('./assets/BacklogData_180719.csv', {responseType: 'text'}).subscribe(data => {
@@ -95,21 +97,21 @@ export class FileReaderComponent implements OnInit {
   }
 
   filter(product) {
-
-    if(product === 'none') {
-      this.allfilterdData = this.allDataInJson
-    }else {
-      this.allfilterdData = this.allDataInJson.filter(e => e['Product'] === product)
-    }
+    this.selectedProduct = product;
+    // if(product === 'none') {
+    //   this.allfilterdData = this.allDataInJson
+    // }else {
+    //   this.allfilterdData = this.allDataInJson.filter(e => e['Product'] === product)
+    // }
 
   }
   filterOwnerName(name) {
-
-    if(name === 'none') {
-      this.allfilterdData = this.allDataInJson  
-    }else {
-      this.allfilterdData = this.allDataInJson.filter(e => e['Owner team'] === name)
-    }
+    this.selectedOwner = name;
+    // if(name === 'none') {
+    //   this.allfilterdData = this.allDataInJson  
+    // }else {
+    //   this.allfilterdData = this.allDataInJson.filter(e => e['Owner team'] === name)
+    // }
   }
 
   read(event){
@@ -118,5 +120,23 @@ export class FileReaderComponent implements OnInit {
         this.compute(fileReaer.result);
       }
       fileReaer.readAsText(event.target.files[0]);
+  }
+
+  applyFilter() {
+      console.log((this.selectedOwner  && this.selectedProduct) !== null && (this.selectedOwner && this.selectedProduct) !== "none")
+      if(this.selectedProduct == null || this.selectedProduct == "none") {
+        this.allfilterdData = this.allDataInJson.filter(e => e['Owner team'] === this.selectedOwner)
+      }
+      if(this.selectedProduct == null || this.selectedProduct == "none") {
+        this.allfilterdData = this.allDataInJson.filter(e => e['Product'] === this.selectedProduct)
+      }
+      if ((this.selectedOwner  && this.selectedProduct) !== null && (this.selectedOwner && this.selectedProduct) !== "none") {
+        this.allfilterdData = this.allDataInJson.filter(e => e['Product'] === this.selectedProduct);
+        this.allfilterdData = this.allfilterdData.filter(e => e['Owner team'] === this.selectedOwner);
+      }
+  }
+
+  clear() {
+    this.allfilterdData = this.allDataInJson;
   }
 }
